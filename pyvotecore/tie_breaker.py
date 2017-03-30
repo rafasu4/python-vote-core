@@ -34,7 +34,8 @@ class TieBreaker(object):
         random_ordering = copy(self.random_ordering)
         if reverse:
             random_ordering.reverse()
-        if getattr(list(tied_candidates)[0], '__iter__', False):
+        # The following line is from @gleb-chipiga
+        if isinstance(list(tied_candidates)[0], tuple):
             result = self.break_complex_ties(tied_candidates, random_ordering)
         else:
             result = self.break_simple_ties(tied_candidates, random_ordering)
