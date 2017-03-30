@@ -11,7 +11,7 @@ requires = [
     'python-graph-core >= 1.8.0',
 ]
 
-setup(name='python-vote-core',
+setup(name='python3-vote-core',
       version='20170329.00',
       description="An implementation of various election methods, most notably the Schulze Method and Schulze STV. -- Python 3 Only",
       long_description=README + '\n\n' + CHANGES + '\n\n' + LICENSE,

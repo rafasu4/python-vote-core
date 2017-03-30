@@ -13,8 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pyvotecore.schulze_stv import SchulzeSTV
-from pyvotecore.schulze_helper import SchulzeHelper
+from py3votecore.schulze_stv import SchulzeSTV
+from py3votecore.schulze_helper import SchulzeHelper
 import unittest
 
 

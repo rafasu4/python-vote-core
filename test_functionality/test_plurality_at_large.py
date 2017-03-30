@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pyvotecore.plurality_at_large import PluralityAtLarge
+from py3votecore.plurality_at_large import PluralityAtLarge
 import unittest
 
 
