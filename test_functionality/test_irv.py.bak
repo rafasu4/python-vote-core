@@ -58,9 +58,9 @@ class TestInstantRunoff(unittest.TestCase):
         self.assertEqual(len(output["rounds"][0]), 3)
         self.assertEqual(output["rounds"][0]["tallies"], {'c1': 26, 'c2': 20, 'c3': 20})
         self.assertEqual(output["rounds"][0]["tied_losers"], set(['c2', 'c3']))
-        self.assertTrue(output["rounds"][0]["loser"] in output["rounds"][0]["tied_losers"])
+        self.assert_(output["rounds"][0]["loser"] in output["rounds"][0]["tied_losers"])
         self.assertEqual(len(output["rounds"][1]["tallies"]), 2)
-        self.assertTrue("winner" in output["rounds"][1])
+        self.assert_("winner" in output["rounds"][1])
         self.assertEqual(len(output["tie_breaker"]), 3)
 
     # IRV, no rounds

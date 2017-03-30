@@ -13,9 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from .abstract_classes import MultipleWinnerVotingSystem
+from abstract_classes import MultipleWinnerVotingSystem
 from collections import defaultdict
-from .common_functions import matching_keys
+from common_functions import matching_keys
 import copy
 import math
 
@@ -54,12 +54,12 @@ class STV(MultipleWinnerVotingSystem):
 
             # If all the votes have been used up, start from scratch for the remaining candidates
             round = {}
-            if len([ballot for ballot in ballots if ballot["count"] > 0 and ballot["ballot"]]) == 0:
+            if len(filter(lambda ballot: ballot["count"] > 0 and ballot["ballot"], ballots)) == 0:
                 remaining_candidates = self.candidates - self.winners
                 round["note"] = "reset"
                 ballots = copy.deepcopy(self.ballots)
                 for ballot in ballots:
-                    ballot["ballot"] = [x for x in ballot["ballot"] if x in remaining_candidates]
+                    ballot["ballot"] = filter(lambda x: x in remaining_candidates, ballot["ballot"])
                 quota = STV.droop_quota(ballots, self.required_winners - len(self.winners))
 
             round["tallies"] = self.tallies(ballots)
@@ -71,7 +71,7 @@ class STV(MultipleWinnerVotingSystem):
                     # Collect candidates as winners
                     round["winners"] = set([
                         candidate
-                        for candidate, tally in list(round["tallies"].items())
+                        for candidate, tally in round["tallies"].items()
                         if tally >= self.quota
                     ])
                     self.winners |= round["winners"]
@@ -133,7 +133,7 @@ class STV(MultipleWinnerVotingSystem):
         for ballot in ballots:
             if ballot["ballot"]:
                 tallies[ballot["ballot"][0]] += ballot["count"]
-        return dict((candidate, votes) for (candidate, votes) in tallies.items())
+        return dict((candidate, votes) for (candidate, votes) in tallies.iteritems())
 
     @staticmethod
     def droop_quota(ballots, seats=1):

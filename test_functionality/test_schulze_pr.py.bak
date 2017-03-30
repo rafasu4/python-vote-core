@@ -78,7 +78,7 @@ class TestSchulzePR(unittest.TestCase):
         output = SchulzePR(input, winner_threshold=3, ballot_notation=SchulzePR.BALLOT_NOTATION_GROUPING).as_dict()
 
         from pprint import PrettyPrinter
-        print()
+        print
         PrettyPrinter(indent=4).pprint(output)
 
 

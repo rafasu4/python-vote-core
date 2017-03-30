@@ -70,7 +70,7 @@ class TestPluralityAtLarge(unittest.TestCase):
         self.assertEqual(output["tallies"], {'c3': 52, 'c2': 52, 'c1': 56, 'c4': 12})
         self.assertEqual(len(output["tie_breaker"]), 4)
         self.assertEqual(output["tied_winners"], set(['c2', 'c3']))
-        self.assertTrue("c1" in output["winners"] and ("c2" in output["winners"] or "c3" in output["winners"]))
+        self.assert_("c1" in output["winners"] and ("c2" in output["winners"] or "c3" in output["winners"]))
         self.assertEqual(len(output), 5)
 
 

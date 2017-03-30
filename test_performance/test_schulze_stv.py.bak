@@ -34,7 +34,7 @@ class TestSchulzeSTV(unittest.TestCase):
         SchulzeSTV(input, required_winners=5, ballot_notation=SchulzeSTV.BALLOT_NOTATION_RANKING).as_dict()
 
         # Run tests
-        self.assertTrue(time.time() - startTime < 8)
+        self.assert_(time.time() - startTime < 8)
 
     # This test looks at few graph nodes, but large completion patterns. With
     # 10 candidates and 9 winners, we're looking at 3^9 (19683) patterns to
@@ -51,7 +51,7 @@ class TestSchulzeSTV(unittest.TestCase):
         SchulzeSTV(input, required_winners=9, ballot_notation=SchulzeSTV.BALLOT_NOTATION_RANKING).as_dict()
 
         # Run tests
-        self.assertTrue(time.time() - startTime < 2)
+        self.assert_(time.time() - startTime < 2)
 
     # This test ensures that if you request the same number of winners as there
     # are candidates, the system doesn't take the long route to calculate them.

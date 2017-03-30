@@ -34,7 +34,7 @@ class TestSchulzePR(unittest.TestCase):
         SchulzePR(input, winner_threshold=5, ballot_notation=SchulzePR.BALLOT_NOTATION_RANKING).as_dict()
 
         # Run tests
-        self.assertTrue(time.time() - startTime < 1)
+        self.assert_(time.time() - startTime < 1)
 
     # This test considers a case that SchulzeSTV starts to choke on due to the
     # potential size of the completion patterns
@@ -50,7 +50,7 @@ class TestSchulzePR(unittest.TestCase):
         SchulzePR(input, winner_threshold=9, ballot_notation=SchulzePR.BALLOT_NOTATION_RANKING).as_dict()
 
         # Run tests
-        self.assertTrue(time.time() - startTime < 2)
+        self.assert_(time.time() - startTime < 2)
 
 if __name__ == "__main__":
     unittest.main()
