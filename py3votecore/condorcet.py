@@ -30,13 +30,12 @@ class CondorcetHelper(object):
         self.ballots = ballots
         if ballot_notation == CondorcetHelper.BALLOT_NOTATION_GROUPING:
             for ballot in self.ballots:
-                ballot["ballot"].reverse()
                 new_ballot = {}
-                r = 0
+                r = len(ballot["ballot"])
                 for rank in ballot["ballot"]:
-                    r += 1
                     for candidate in rank:
                         new_ballot[candidate] = r
+                    r -= 1
                 ballot["ballot"] = new_ballot
         elif ballot_notation == CondorcetHelper.BALLOT_NOTATION_RANKING:
             for ballot in self.ballots:
