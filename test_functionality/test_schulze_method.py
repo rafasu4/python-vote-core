@@ -154,6 +154,22 @@ class TestSchulzeMethod(unittest.TestCase):
         })
         self.assertEqual(output['tied_winners'], set(['A', 'B']))
 
+    def test_tuple_ballots(self):
+
+        # Generate data
+        input_tuple = [
+            {"count": 1, "ballot": (("A"), ("B", "C"))},
+            {"count": 1, "ballot": (("B"), ("A"), ("C"))},
+        ]
+        input_list = [
+            {"count": 1, "ballot": [["A"], ["B", "C"]]},
+            {"count": 1, "ballot": [["B"], ["A"], ["C"]]},
+        ]
+        output_tuple = SchulzeMethod(input_tuple, ballot_notation=SchulzeMethod.BALLOT_NOTATION_GROUPING).as_dict()
+        output_list = SchulzeMethod(input_list, ballot_notation=SchulzeMethod.BALLOT_NOTATION_GROUPING).as_dict()
+
+        # Run tests
+        self.assertEqual(output_tuple, output_list)
 
 if __name__ == "__main__":
     unittest.main()
