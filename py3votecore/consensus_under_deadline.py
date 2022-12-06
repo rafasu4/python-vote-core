@@ -38,7 +38,7 @@ class ConsensusUnderDeadline():
 
     def possible_winners(self) -> list:
         '''
-            Returns the alternatives who are possibly win consider their scores and remaining time. 
+            Returns the alternatives who are possibly to win, consider their scores and the remaining time. 
 
             Returns:
                 List of alternatives with a chance to win
