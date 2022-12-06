@@ -78,7 +78,7 @@ class ConsensusUnderDeadline():
             >>> print(cud.deploy_algorithm())
             null
         '''
-        pass
+        return 0
     
     def possible_winners(self) -> list:
         '''
@@ -125,7 +125,7 @@ class ConsensusUnderDeadline():
             >>> print(cud.possible_winners())
             [b]
         '''
-        pass
+        return 0
 
     def change_vote(self, voter: int, vote: str):
         '''
@@ -159,7 +159,7 @@ class ConsensusUnderDeadline():
             >>> print(cud.voters_current_ballot)
             {1: 'b', 2:'a', 3:'b', 4:'d', 5:'c' }
         '''
-        pass
+        return 0
 
     @staticmethod
     def votes_calculate(ballots: dict) -> dict:
@@ -185,7 +185,7 @@ class ConsensusUnderDeadline():
            >>> print(ConsensusUnderDeadline.votes_calculate(ballots))
            {'a': 3, 'b': 1, 'c': 0, 'd': 1 }
         '''
-        pass
+        return 0
     
     @staticmethod
     def choose_random_voter(voters: list) -> int:
@@ -202,18 +202,18 @@ class ConsensusUnderDeadline():
             Seed will be used for testing
             >>> v = [1, 2, 3]
             >>> print(ConsensusUnderDeadline.choose_random_voter(v))
-            [1]
+            1
 
             >>> v = [1, 2, 3]
             >>> print(ConsensusUnderDeadline.choose_random_voter(v))
-            [2]
+            2
 
             >>> v = [1, 2, 3]
             >>> print(ConsensusUnderDeadline.choose_random_voter(v))
-            [3]
+            3
 
         '''
-        pass
+        return 0
 
 
 if __name__ == '__main__':
