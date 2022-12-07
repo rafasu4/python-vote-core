@@ -1,4 +1,4 @@
-from consensus_under_deadline import ConsensusUnderDeadline
+from py3votecore.consensus_under_deadline import ConsensusUnderDeadline
 import unittest
 
 class TestConsensusUnderDeadline(unittest.TestCase):
