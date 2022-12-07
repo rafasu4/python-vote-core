@@ -117,6 +117,21 @@ class TestConsensusUnderDeadline(unittest.TestCase):
         self.assertEqual(self.cud.voters_current_ballot, {1: 'c', 2:'c', 3:'c'} )
         self.cud.change_vote(3, 'a')
         self.assertEqual(self.cud.voters_current_ballot, {1: 'c', 2:'c', 3:'a'} )
+    
+    def test_votes_calculate_results(self):
+        self.assertEqual(ConsensusUnderDeadline.votes_calculate(self.cud.voters_current_ballot), {'a': 1, 'b': 1, 'c': 1 })
+        v = (1, 2, 3)
+        v_type = (1, 1, 1)
+        alters = ('a', 'b', 'c')
+        df_alter = 'null'
+        v_cur_ballot = {1: 'a', 2:'a', 3:'c'}
+        vp =[['a', 'b', 'c'], ['b', 'c', 'a'],['c', 'a', 'b']]
+        t = 1
+        self.cud = ConsensusUnderDeadline(remaining_rounds=t,voters=v, voters_type = v_type, alternatives=alters, default_alternative=df_alter,voters_preferences=vp, voters_current_ballot=v_cur_ballot)
+        self.assertEqual(ConsensusUnderDeadline.votes_calculate(self.cud.voters_current_ballot), {'a': 2, 'b': 0, 'c': 1 })
+        v_cur_ballot = {1: 'a', 2:'a', 3:'a'}
+        self.cud = ConsensusUnderDeadline(remaining_rounds=t,voters=v, voters_type = v_type, alternatives=alters, default_alternative=df_alter,voters_preferences=vp, voters_current_ballot=v_cur_ballot)
+        self.assertEqual(ConsensusUnderDeadline.votes_calculate(self.cud.voters_current_ballot), {'a': 3, 'b': 0, 'c': 0 })
 
 if __name__ == '__main__':
     unittest.main()
