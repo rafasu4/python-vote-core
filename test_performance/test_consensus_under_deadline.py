@@ -79,6 +79,44 @@ class TestConsensusUnderDeadline(unittest.TestCase):
         t = 3
         self.cud = ConsensusUnderDeadline(remaining_rounds=1,voters=v, voters_type = v_type, alternatives=alters, default_alternative=df_alter,voters_preferences=vp, voters_current_ballot=v_cur_ballot)
         self.assertEqual(self.cud.possible_winners() ,['a', 'b'])
-        
+
+    def test_change_vote_args(self):
+        v = (1, 2, 3)
+        v_type = (1, 1, 1)
+        alters = ('a', 'b', 'c')
+        df_alter = 'null'
+        v_cur_ballot = {1: 'a', 2:'b', 3:'c'}
+        vp =[['a', 'b', 'c'], ['b', 'c', 'a'],['c', 'a', 'b']]
+        t = 1
+        self.cud = ConsensusUnderDeadline(remaining_rounds=t,voters=v, voters_type = v_type, alternatives=alters, default_alternative=df_alter,voters_preferences=vp, voters_current_ballot=v_cur_ballot)
+        # given voter isn't exist
+        with self.assertRaises(ValueError):
+            self.cud.change_vote(5, 'a')
+            self.cud.change_vote(4, 'a')
+        # given alternative isn't exist
+        with self.assertRaises(ValueError):
+            self.cud.change_vote(1, 'd')
+            self.cud.change_vote(1, 'e')
+        # user hasn't changed his ballot
+        with self.assertRaises(ValueError):
+            self.cud.change_vote(1, 'a')
+            self.cud.change_vote(2, 'b')
+    
+    def test_change_vote_results(self):
+        v = (1, 2, 3)
+        v_type = (1, 1, 1)
+        alters = ('a', 'b', 'c')
+        df_alter = 'null'
+        v_cur_ballot = {1: 'a', 2:'b', 3:'c'}
+        vp =[['a', 'b', 'c'], ['b', 'c', 'a'],['c', 'a', 'b']]
+        t = 1
+        self.cud = ConsensusUnderDeadline(remaining_rounds=t,voters=v, voters_type = v_type, alternatives=alters, default_alternative=df_alter,voters_preferences=vp, voters_current_ballot=v_cur_ballot)
+        self.cud.change_vote(1, 'c')
+        self.assertEqual(self.cud.voters_current_ballot, {1: 'c', 2:'b', 3:'c'} )
+        self.cud.change_vote(2, 'c')
+        self.assertEqual(self.cud.voters_current_ballot, {1: 'c', 2:'c', 3:'c'} )
+        self.cud.change_vote(3, 'a')
+        self.assertEqual(self.cud.voters_current_ballot, {1: 'c', 2:'c', 3:'a'} )
+
 if __name__ == '__main__':
     unittest.main()
