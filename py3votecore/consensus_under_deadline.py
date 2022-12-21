@@ -30,6 +30,7 @@ class ConsensusUnderDeadline():
                 remaining_rounds - a threshold for the amount if rounds left until decision should be taken
                 random_selection - whether the selection of voter for changing their ballot. If False - the smallest voter's number will be selected
         '''
+        logger.info('ConsensusUnderDeadline object created')
         self.voters = voters
         self.voters_type = voters_type
         self.alternatives = alternatives
@@ -190,6 +191,8 @@ class ConsensusUnderDeadline():
             {1: 'b', 2: 'b', 3: 'b', 4: 'd', 5: 'c'}
         '''
         self.voters_current_ballot[voter] = vote
+        logger.info('voter %s changed his vote for %s', voter, vote)
+        
 
     def choose_random_voter(self, voters: list) -> int:
         '''
@@ -223,7 +226,9 @@ class ConsensusUnderDeadline():
             >>> print(cud.choose_random_voter(v))
             3
         '''
-        return random.choice(voters) if self.random_selection else min(voters)
+        ans = random.choice(voters) if self.random_selection else min(voters)
+        logger.info('voter %s has been chosen for changing ballot', ans)
+        return ans
 
     @staticmethod
     def votes_calculate(ballots: dict) -> dict:
