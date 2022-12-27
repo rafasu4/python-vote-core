@@ -82,14 +82,26 @@ class ConsensusUnderDeadline():
                 random_selection - whether the selection of voter for changing their ballot. If False - the smallest voter's number will be selected
         '''
         logger.info('ConsensusUnderDeadline object created')
+        if len(tuple(set(voters))) != len(voters):
+            raise ValueError('each voter must have unique id')
         self.voters = voters
+        flag = False
+        flag = [True for type in voters_type if (1 < type or type < 0)]
+        if flag:
+            raise TypeError('voter type can only be presented with 1 or 0')
         self.voters_type = voters_type
+        if len(tuple(set(alternatives))) != len(alternatives):
+            raise ValueError('each alternative must have unique id')
+        if len(voters) != len(voters_preferences):
+            raise TypeError('length of voters and preference must be the same')
         self.alternatives = alternatives
         self.voters_preferences = voters_preferences
         self.default_alternative = default_alternative
         # initiate first ballot for each voter by their top preference
         self.voters_current_ballot = {i + 1: voters_preferences[i][0]
                                       for i in range(len(voters_preferences))}
+        if remaining_rounds < 0:
+            raise ValueError(f'''time can't be negative''')
         self.remaining_rounds = remaining_rounds
         self.random_selection = random_selection
 
@@ -302,6 +314,12 @@ class ConsensusUnderDeadline():
             >>> print(cud.voters_current_ballot)
             {1: 'b', 2: 'b', 3: 'b', 4: 'd', 5: 'c'}
         '''
+        if voter not in self.voters:
+            raise ValueError(f'''voter doesn't exist''')
+        if new_vote not in self.alternatives or current_vote not in self.alternatives:
+            raise ValueError(f'''given alternative doesn't exist''')
+        if new_vote == current_vote:
+            raise ValueError(f'''voter can't change his ballot to current one''')
         self.voters_current_ballot[voter] = new_vote
         logger.info('voter %s changed his vote from %s to %s',
                     voter, current_vote, new_vote)
