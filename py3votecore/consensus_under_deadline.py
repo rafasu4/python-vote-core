@@ -3,10 +3,9 @@ import random
 import logging
 from collections import Counter
 
-logging.basicConfig(filename='running_algorithm.log',
-                    encoding='utf-8', level=logging.DEBUG)
-logger = logging.getLogger()
 
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger()
 
 def mdvr(voters: tuple, voters_type: tuple, alternatives: tuple, voters_preferences: list,
          default_alternative: str, remaining_rounds: int, random_selection: bool):
@@ -385,7 +384,6 @@ class ConsensusUnderDeadline():
            {'a': 3, 'b': 1, 'd': 1}
         '''
         return dict(Counter(ballots.values()))
-
 
 if __name__ == '__main__':
     doctest.testmod()
