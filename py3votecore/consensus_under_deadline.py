@@ -167,10 +167,13 @@ class ConsensusUnderDeadline():
             possible_winners = self.possible_winners()
             logger.debug('round number: %g', self.remaining_rounds)
             # if no alternative is eligible to win - no need to keep iterating
-            if possible_winners == self.default_alternative:
+            if possible_winners == [self.default_alternative]:
                 logger.debug(
                     'possible winners: %s. Algorithm is finished with no winner', self.default_alternative)
                 break
+            # if only one option is valid
+            elif len(possible_winners) == 1:
+                return possible_winners[0]
             voters_candidate = []  # candidate voters to change their ballot
             # select voters to change their ballot base on their type and selected alternative
             for voter_index in range(len(self.voters)):
@@ -188,12 +191,12 @@ class ConsensusUnderDeadline():
                 ballot_change_voter = self.choose_random_voter(
                     voters_candidate)
                 ballot_change_voter_preference = self.voters_preferences[ballot_change_voter - 1]
-                ballot_change_voter_current_ballot = self.voters_current_ballot[ballot_change_voter]
+                voter_current_ballot = self.voters_current_ballot[ballot_change_voter]
                 # voter chooses to change his ballot to the top possible alternative (besides his current)
                 for preference in ballot_change_voter_preference:
-                    if preference in possible_winners and preference != ballot_change_voter_current_ballot:
+                    if preference in possible_winners and preference != voter_current_ballot:
                         self.change_vote(
-                            ballot_change_voter, preference, ballot_change_voter_current_ballot)
+                            ballot_change_voter, preference, voter_current_ballot)
                         break
         # if unanimously hasn't reached - return default alternative
         return self.default_alternative
@@ -201,6 +204,8 @@ class ConsensusUnderDeadline():
     def round_passed(self):
         '''
             Lower round by one - symbolize a passing iteration.
+
+            ---------------------------------TESTS---------------------------------
             >>> v = {1, 2, 3}
             >>> v_type = {1, 1, 1}
             >>> alters = {'a', 'b', 'c'}
@@ -277,7 +282,7 @@ class ConsensusUnderDeadline():
                     'alternative %s nominate as a winner candidate', alt)
         # if none of the alternatives has a chance to be chosen - return default alternative
         if len(possible_winners_alters) == 0:
-            return self.default_alternative
+            return [self.default_alternative]
         logger.debug('possible winners: %s', possible_winners_alters)
         return possible_winners_alters
 

@@ -47,7 +47,7 @@ class TestConsensusUnderDeadline(unittest.TestCase):
         vp =[['a', 'b', 'c'], ['b', 'c', 'a'],['c', 'a', 'b']]
         t = 0
         self.cud = ConsensusUnderDeadline(voters=v, voters_type = v_type, alternatives=alters, default_alternative=df_alter,voters_preferences=vp, remaining_rounds=t, random_selection=False)
-        self.assertEqual(self.cud.possible_winners() ,'null')
+        self.assertEqual(self.cud.possible_winners() ,['null'])
         self.cud = ConsensusUnderDeadline(voters=(1, 2, 3, 4, 5), voters_type = (0, 0, 0, 0, 0), alternatives=('a', 'b', 'c', 'd'), voters_preferences=[['a', 'b', 'c', 'd'], ['a', 'c', 'b', 'd'], ['b', 'c', 'a', 'd'], ['b', 'a', 'c', 'd'], ['c', 'b', 'd', 'a']], default_alternative=df_alter,remaining_rounds=4, random_selection=False)
         v = (1, 2, 3, 4, 5)
         v_type = (0, 0, 0, 0, 0)
