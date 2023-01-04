@@ -2,6 +2,10 @@ import doctest
 import random
 import logging
 from collections import Counter
+import cppyy
+from cppyy.gbl import std
+
+cppyy.include("consensus_under_deadline.cpp")
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -9,51 +13,51 @@ logger = logging.getLogger()
 
 def mdvr(voters: tuple, voters_type: tuple, alternatives: tuple, voters_preferences: list,
          default_alternative: str, remaining_rounds: int, random_selection: bool):
-        '''
-        Runs the algorithm 'Consensus Under Deadline' to determine the winning result.
-
-        Returns:
-            The winner alternative
-
-        ---------------------------------TESTS---------------------------------
-        Classic example:
-        Since 3 different votes were chosen, we'll assume that all 3 voters will want to change their ballot (to prevent default option)
-        using seed in random, voter 1 will be chosen as an example, as all voters active
-        >>> v = (1, 2, 3)
-        >>> v_type = (1, 1, 1)
-        >>> alters = ('a', 'b', 'c')
-        >>> df_alter = 'null'
-        >>> v_cur_ballot = {1: 'a', 2:'b', 3:'c'}
-        >>> vp =[['a', 'b', 'c'], ['b', 'c', 'a'],['c', 'a', 'b']]
-        >>> t = 2
-        >>> print(mdvr(voters=v, voters_type = v_type, alternatives=alters, default_alternative=df_alter,voters_preferences=vp, remaining_rounds=t, random_selection=False))
-        b
-
-        Lazy voter example:
-        >>> v = (1, 2, 3, 4, 5)
-        >>> v_type = (1, 1, 1, 1, 0)
-        >>> alters = ('a', 'b', 'c', 'd')
-        >>> df_alter = 'null'
-        >>> v_cur_ballot = {1: 'a', 2:'a', 3:'b', 4:'b', 5:'c' }
-        >>> vp =[['a', 'b', 'c', 'd'], ['a', 'c', 'b', 'd'], ['b', 'c', 'a', 'd'], ['b', 'a', 'c', 'd'], ['c', 'b', 'd', 'a']]
-        >>> t = 4
-        >>> print(mdvr(voters=v, voters_type = v_type, alternatives=alters, default_alternative=df_alter,voters_preferences=vp, remaining_rounds=t, random_selection=False))
-        b
-
-        No consensus reached example:
-        >>> v = (1, 2, 3, 4, 5)
-        >>> v_type = (0, 0, 0, 0, 0)
-        >>> alters = ('a', 'b', 'c', 'd')
-        >>> df_alter = 'null'
-        >>> v_cur_ballot = {1: 'a', 2:'a', 3:'b', 4:'b', 5:'c' }
-        >>> vp =[['a', 'b', 'c', 'd'], ['a', 'c', 'b', 'd'], ['b', 'c', 'a', 'd'], ['b', 'a', 'c', 'd'], ['c', 'b', 'd', 'a']]
-        >>> t = 2
-        >>> print(mdvr(voters=v, voters_type = v_type, alternatives=alters, default_alternative=df_alter,voters_preferences=vp, remaining_rounds=t, random_selection=False))
-        null
     '''
-        cud = ConsensusUnderDeadline(voters, voters_type, alternatives, voters_preferences,
+    Runs the algorithm 'Consensus Under Deadline' to determine the winning result.
+
+    Returns:
+        The winner alternative
+
+    ---------------------------------TESTS---------------------------------
+    Classic example:
+    Since 3 different votes were chosen, we'll assume that all 3 voters will want to change their ballot (to prevent default option)
+    using seed in random, voter 1 will be chosen as an example, as all voters active
+    >>> v = (1, 2, 3)
+    >>> v_type = (1, 1, 1)
+    >>> alters = ('a', 'b', 'c')
+    >>> df_alter = 'null'
+    >>> v_cur_ballot = {1: 'a', 2:'b', 3:'c'}
+    >>> vp =[['a', 'b', 'c'], ['b', 'c', 'a'],['c', 'a', 'b']]
+    >>> t = 2
+    >>> print(mdvr(voters=v, voters_type = v_type, alternatives=alters, default_alternative=df_alter,voters_preferences=vp, remaining_rounds=t, random_selection=False))
+    b
+
+    Lazy voter example:
+    >>> v = (1, 2, 3, 4, 5)
+    >>> v_type = (1, 1, 1, 1, 0)
+    >>> alters = ('a', 'b', 'c', 'd')
+    >>> df_alter = 'null'
+    >>> v_cur_ballot = {1: 'a', 2:'a', 3:'b', 4:'b', 5:'c' }
+    >>> vp =[['a', 'b', 'c', 'd'], ['a', 'c', 'b', 'd'], ['b', 'c', 'a', 'd'], ['b', 'a', 'c', 'd'], ['c', 'b', 'd', 'a']]
+    >>> t = 4
+    >>> print(mdvr(voters=v, voters_type = v_type, alternatives=alters, default_alternative=df_alter,voters_preferences=vp, remaining_rounds=t, random_selection=False))
+    b
+
+    No consensus reached example:
+    >>> v = (1, 2, 3, 4, 5)
+    >>> v_type = (0, 0, 0, 0, 0)
+    >>> alters = ('a', 'b', 'c', 'd')
+    >>> df_alter = 'null'
+    >>> v_cur_ballot = {1: 'a', 2:'a', 3:'b', 4:'b', 5:'c' }
+    >>> vp =[['a', 'b', 'c', 'd'], ['a', 'c', 'b', 'd'], ['b', 'c', 'a', 'd'], ['b', 'a', 'c', 'd'], ['c', 'b', 'd', 'a']]
+    >>> t = 2
+    >>> print(mdvr(voters=v, voters_type = v_type, alternatives=alters, default_alternative=df_alter,voters_preferences=vp, remaining_rounds=t, random_selection=False))
+    null
+'''
+    cud = ConsensusUnderDeadline(voters, voters_type, alternatives, voters_preferences,
                                  default_alternative, remaining_rounds, random_selection)
-        return cud.deploy_algorithm()
+    return cud.deploy_algorithm()
 
 
 class ConsensusUnderDeadline():
@@ -158,13 +162,19 @@ class ConsensusUnderDeadline():
         while self.remaining_rounds >= 0:
             logger.debug('voters have cast their ballots')
             self.round_passed()  # mark this round as passed
-            current_votes_score = ConsensusUnderDeadline.votes_calculate(
-                self.voters_current_ballot)
+
+            # cppyy function call
+            currentVotesMap = std.map[int, str]()
+            for voter, ballot in self.voters_current_ballot.items():
+                currentVotesMap[voter] = ballot
+            current_votes_score = dict(
+                cppyy.gbl.votesCalculate(currentVotesMap))
             for key, value in current_votes_score.items():
                 if value == unanimously:
                     return key
             # all the alternative who's possible to be elected
-            possible_winners = self.possible_winners()
+            possible_winners = list(cppyy.gbl.possibleWinners(
+                currentVotesMap, self.remaining_rounds, unanimously))
             logger.debug('round number: %g', self.remaining_rounds)
             # if no alternative is eligible to win - no need to keep iterating
             if possible_winners == self.default_alternative:
@@ -318,7 +328,8 @@ class ConsensusUnderDeadline():
         if new_vote not in self.alternatives or current_vote not in self.alternatives:
             raise ValueError(f'''given alternative doesn't exist''')
         if new_vote == current_vote:
-            raise ValueError(f'''voter can't change his ballot to current one''')
+            raise ValueError(
+                f'''voter can't change his ballot to current one''')
         self.voters_current_ballot[voter] = new_vote
         logger.info('voter %s changed his vote from %s to %s',
                     voter, current_vote, new_vote)
@@ -384,6 +395,7 @@ class ConsensusUnderDeadline():
            {'a': 3, 'b': 1, 'd': 1}
         '''
         return dict(Counter(ballots.values()))
+
 
 if __name__ == '__main__':
     doctest.testmod()
