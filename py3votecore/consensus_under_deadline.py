@@ -1,11 +1,16 @@
+'''
+    Consensus under deadlin (CUD) is a group decision algorithm based on a time-bounded iterative voting
+    process, based on preferences of multiple voters. In this implementation, The voter's task is to find an 
+    alternative which will be agreed upon all of the voters, i.e unanimous.
+    This algorithm is based on the following article: https://arxiv.org/abs/1905.07173
+    Authors: Marina Bannikova, Lihi Dery, Svetlana Obraztsova, Zinovi Rabinovich, Jeffrey S. Rosenschein
+    Programmer: Raphael Suliman
+    Date: January 2023.
+'''
 import doctest
 import random
 import logging
 from collections import Counter
-
-
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger()
 
 def mdvr(voters: tuple, voters_type: tuple, alternatives: tuple, voters_preferences: list,
          default_alternative: str, remaining_rounds: int, random_selection: bool):
@@ -391,4 +396,6 @@ class ConsensusUnderDeadline():
         return dict(Counter(ballots.values()))
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+    logger = logging.getLogger()
     doctest.testmod()

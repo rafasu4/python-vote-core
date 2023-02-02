@@ -1,3 +1,12 @@
+'''
+    Consensus under deadlin (CUD) is a group decision algorithm based on a time-bounded iterative voting
+    process, based on preferences of multiple voters. In this implementation, The voter's task is to find an 
+    alternative which will be agreed upon all of the voters, i.e unanimous.
+    This algorithm is based on the following article: https://arxiv.org/abs/1905.07173
+    Authors: Marina Bannikova, Lihi Dery, Svetlana Obraztsova, Zinovi Rabinovich, Jeffrey S. Rosenschein
+    Programmer: Raphael Suliman
+    Date: January 2023.
+'''
 from py3votecore.consensus_under_deadline import ConsensusUnderDeadline, mdvr
 import unittest
 
